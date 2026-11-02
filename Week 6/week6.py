@@ -28,4 +28,6 @@ for i in imdb.sample(3).index:
 
 # Clean Text
 
+def clean_text(text, do_lemmatize=True):
+ewatdfygutreastdyug
 
