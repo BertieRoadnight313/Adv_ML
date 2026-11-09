@@ -99,6 +99,23 @@ df["fcm_max_membership"] = U.max(axis=1)
 sorted_U = np.sort(U, axis=1)
 df["fcm_membership_gap"] = sorted_U[:,-1] - sorted_U[:,-2]
 
+# Part F - Compare K=3, 4,5, and 6
+
+comparison = []
+for candidate_k in [3,4,5,6]:
+    model = FCM(n_clusters=candidate_k, random_state=42)
+    model.fit(X_scaled)
+    U_k = model.u
+    sorted_memberships = np.sort(U_k, axis=1)
+    max_membership = U_k.max(axis=1)
+    gap = sorted_memberships[:,-1] - sorted_memberships[:,-2]
+    comparison.append({
+        "K": candidate_k,
+        "mean_max_membership": max_membership.mean(),
+        "median_max_membership": np.median(max_membership),
+        "mean_top_two_gap": gap.mean()
+    })
+
 
 
 
