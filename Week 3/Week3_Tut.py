@@ -116,6 +116,27 @@ for candidate_k in [3,4,5,6]:
         "mean_top_two_gap": gap.mean()
     })
 
+pd.DataFrame(comparison).round(3)
 
+# Part G - Visualize and profile FCM
+
+plot_df = df.copy()
+plt.figure(figsize=(7, 5))
+sns.scatterplot(data=plot_df, x=features[1], y=features[2],
+                hue="fcm_cluster",palette="tab10")
+plt.title("FCM: provisional labels by maximum membership")
+plt.tight_layout()
+plt.show()
+
+# membership sharpness
+
+plt.figure(figsize=(7,4))
+sns.histplot(df["fcm_max_membership"], bins=20, kde=True)
+plt.xlabel("Maximum FCM Membership")
+plt.title("How sharply are customers assigned")
+plt.tight_layout()
+plt.show()
+
+display(df.groupby("fcm_cluster")[features].mean().round(1))
 
 
