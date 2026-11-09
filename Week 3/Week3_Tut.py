@@ -137,6 +137,20 @@ plt.title("How sharply are customers assigned")
 plt.tight_layout()
 plt.show()
 
-display(df.groupby("fcm_cluster")[features].mean().round(1))
+print(df.groupby("fcm_cluster")[features].mean().round(1))
 
+# option 1 DBSCAN
+from sklearn.cluster import DBSCAN
 
+dbscan = DBSCAN(eps=0.7, min_samples=5)
+db_labels = dbscan.fit_predict(X_scaled)
+print(pd.Series(db_labels).value_counts().sort_index())
+# label -1 denotes observations treated as noise by DBSCAN
+
+# option 2 hierarchical clustering
+
+from sklearn.cluster import AgglomerativeClustering
+
+hier = AgglomerativeClustering(n_clusters=k, linkage="ward")
+hier_labels = hier.fit_predict(X_scaled)
+print(pd.Series(hier_labels).value_counts().sort_index())
