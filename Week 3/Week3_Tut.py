@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
-from fcmeans import FCM
+from fcmeans import FCM # install as 'pip install fuzzy-c-means' - not fcmeans
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -79,7 +79,25 @@ sns.scatterplot(data=df, x=features[1], y=features[2],
                 hue="kmeans_cluster", palette="tab10")
 plt.title("KMeans Clustering Segments")
 plt.tight_layout()
-plt.show()
+plt.show() #Part D - Fit the hard clustering baseline
+
+
+# Part E - Fit the fuzzy C-Means
+
+fcm = FCM(n_clusters=k, random_state=42)
+fcm.fit(X_scaled)
+
+U = fcm.u
+centres_scaled = fcm.centers
+
+print("Membership matrix shape:", U.shape)
+print("First five membership vectors:\n", np.round(U[:5], 3))
+print("Row sums (should be about 1):", U.sum(axis=1)[:5].round(4))
+
+df["fcm_cluster"] = U.argmax(axis=1)
+df["fcm_max_membership"] = U.max(axis=1)
+sorted_U = np.sort(U, axis=1)
+df["fcm_membership_gap"] = sorted_U[:,-1] - sorted_U[:,-2]
 
 
 

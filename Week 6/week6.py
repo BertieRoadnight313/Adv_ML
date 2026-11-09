@@ -44,8 +44,8 @@ def clean_text(text, do_lemmatize=True, remove_digits=True):
     return ' '.join(tokens)  # Join tokens back into a single string
 
 # full data set preprocessing
-# imdb['clean'] = imdb['review'].apply(clean_text)
-# imdb.to_csv('/Week 6/IMDB_cleaned.csv', index=False)
+imdb['clean'] = imdb['review'].apply(clean_text)
+imdb.to_csv('/Week 6/IMDB Dataset_cleaned.csv', index=False)
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
 MAX_FEAT = 5000   # manageable for a class demo 
@@ -87,15 +87,16 @@ mis_ix = np.where(mis)[0][:10]  # first 10 errors
 from sklearn.model_selection import StratifiedShuffleSplit 
 sss = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42) 
 for tr_idx, te_idx in sss.split(imdb['clean'], y): 
-break 
+    pass
+
 # Example: show misclassified examples 
 for i in mis_ix: 
-orig_i = te_idx[i] 
-print("ORIG INDEX:", orig_i) 
-print("Label:", imdb.loc[orig_i, 'sentiment']) 
-print("Pred:", "positive" if mnb_pred[i]==1 else "negative") 
-print(imdb.loc[orig_i, 'clean'][:400]) 
-print("----")
+    orig_i = te_idx[i] 
+    print("ORIG INDEX:", orig_i) 
+    print("Label:", imdb.loc[orig_i, 'sentiment']) 
+    print("Pred:", "positive" if mnb_pred[i]==1 else "negative") 
+    print(imdb.loc[orig_i, 'clean'][:400]) 
+    print("----")
 
 
 pos_text = ' '.join(imdb[imdb.sentiment=='positive']['clean'].tolist()) 
@@ -107,12 +108,12 @@ plt.figure(figsize=(10,4)); plt.imshow(wc_neg); plt.axis('off'); plt.title('Nega
 # Most informative features for LR (if using scikit-learn LR) 
 def show_top_coef(classifier, vectorizer, n=20): 
 # assumes binary LR with coef_ shape (1, n_features) 
-feat_names = vectorizer.get_feature_names_out() 
-coefs = classifier.coef_[0] 
-top_pos = np.argsort(coefs)[-n:] 
-top_neg = np.argsort(coefs)[:n] 
-print("Top positive features:\n", feat_names[top_pos]) 
-print("Top negative features:\n", feat_names[top_neg]) 
+    feat_names = vectorizer.get_feature_names_out() 
+    coefs = classifier.coef_[0] 
+    top_pos = np.argsort(coefs)[-n:] 
+    top_neg = np.argsort(coefs)[:n] 
+    print("Top positive features:\n", feat_names[top_pos]) 
+    print("Top negative features:\n", feat_names[top_neg]) 
 show_top_coef(lr, bow_vec, n=20) 
 
 
