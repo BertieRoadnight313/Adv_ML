@@ -124,3 +124,5 @@ for i in mis_ix:
         print("Top positive features:\n", feat_names[top_pos])
         print("Top negative features:\n", feat_names[top_neg])
     show_top_coef(lr, bow_vec, n=20)
+
+# needs committing
